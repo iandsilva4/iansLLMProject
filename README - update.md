@@ -4,6 +4,9 @@
 #    UPDATE    #
 # ############ #
 
+# 6. Create a new branch for your work (recommended)
+git checkout -b <branch_name>
+
 # 1. Stage the changes
 git add . 
 
@@ -25,11 +28,8 @@ git push origin <your_branch_name>
 # actual name of your branch (e.g., "feature/new-feature").
 
 # 4. Create a Pull Request on GitHub
-# - Go to your GitHub repository.
-# - Create a new Pull Request, selecting your branch as the source 
-#   and the 'main' branch as the target.
-# - Add a descriptive title and description to your Pull Request.
-# - Submit the Pull Request for review.
+gh pr create [name]
+gh pr merge [name]
 
 # 5. (After the Pull Request is merged)
 # Update your local 'main' branch with the merged changes:
