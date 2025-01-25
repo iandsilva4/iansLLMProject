@@ -42,6 +42,9 @@ git status
 #   - Stage the resolved files: git add path/to/file1 path/to/file2
 #   - Commit the merge: git commit -m "Merged changes from origin/main"
 
+# 5B. OPTIONAL
+git reset --hard origin/main 
+
 # 6. Create a new branch for your work (recommended)
 git checkout -b <branch_name>
 
