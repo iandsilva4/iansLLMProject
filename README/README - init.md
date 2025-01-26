@@ -9,6 +9,7 @@ cd path/to/your/project
 
 # 2. Check the current branch (optional)
 git branch
+git remote add origin https://github.com/iandsilva4/iansLLMProject
 
 # 3. Fetch changes from the remote repository
 git fetch origin
