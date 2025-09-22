@@ -1,0 +1,266 @@
+---
+const { experiences = [] } = Astro.props;
+---
+<section class="w-full">
+  <div class="relative timeline" style="--baseline-y: 47%; --offset: 56px">
+    <div class="baseline" aria-hidden="true"></div>
+    <div class="overlay" aria-hidden="true"></div>
+    <button type="button" class="timeline-btn left-0" aria-label="Scroll left">
+      <span class="btn-ring"></span>
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5">
+        <path fill-rule="evenodd" d="M15.78 4.72a.75.75 0 010 1.06L9.56 12l6.22 6.22a.75.75 0 11-1.06 1.06l-6.75-6.75a.75.75 0 010-1.06l6.75-6.75a.75.75 0 011.06 0z" clip-rule="evenodd" />
+      </svg>
+    </button>
+    
+    <div id="timeline-track" class="timeline-track" tabindex="0" aria-label="Experience timeline">
+      {experiences.map((exp, i) => (
+        <div class={`timeline-item ${i % 2 === 0 ? 'above' : 'below'}`}>
+          <article class="timeline-card">
+            <div class="card-accent" aria-hidden="true"></div>
+            <div class="card-content">
+              <header class="card-header">
+                <div class="dates">{exp.dates}</div>
+                <h3 class="title">{exp.title} {exp.current && <span class="badge-current">Now</span>}</h3>
+                {exp.company && <div class="company">{exp.company}</div>}
+                {exp.location && <div class="location">{exp.location}</div>}
+              </header>
+              {exp.description && <p class="desc">{exp.description}</p>}
+              {exp.tags && exp.tags.length > 0 && (
+                <div class="tags">
+                  {exp.tags.map((tag) => <span class="tag">{tag}</span>)}
+                </div>
+              )}
+            </div>
+          </article>
+          <span class="connector" aria-hidden="true"></span>
+          <span class="marker" aria-hidden="true"></span>
+        </div>
+      ))}
+    </div>
+    <div class="progress" aria-hidden="true"><span class="progress-bar"></span></div>
+    <button type="button" class="timeline-btn right-0" aria-label="Scroll right">
+      <span class="btn-ring"></span>
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5">
+        <path fill-rule="evenodd" d="M8.22 19.28a.75.75 0 010-1.06L14.44 12 8.22 5.78a.75.75 0 111.06-1.06l6.75 6.75a.75.75 0 010 1.06l-6.75 6.75a.75.75 0 01-1.06 0z" clip-rule="evenodd" />
+      </svg>
+    </button>
+  </div>
+</section>
+
+<style>
+  .timeline-track {
+    position: relative;
+    display: flex;
+    gap: 3rem;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    padding: 3.5rem 3rem 4rem 3rem; /* larger vertical room for stagger */
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    align-items: center;
+    min-height: 720px;
+  }
+  .timeline-track::-webkit-scrollbar { display: none; }
+  .timeline-item { min-width: 24rem; height: auto; position: relative; flex: 0 0 auto; }
+  .overlay { position: absolute; inset: 0; pointer-events: none; }
+  .baseline {
+    position: absolute;
+    left: 3rem; right: 3rem;
+    top: var(--baseline-y);
+    height: 3px;
+    background: linear-gradient(90deg, rgba(59,130,246,0.15), rgba(249,115,22,0.15));
+    z-index: 0;
+  }
+  .baseline::before { content: ''; position: absolute; inset: 0; border-top: 1px dashed rgba(15,23,42,0.08); }
+  .progress { position: absolute; left: 0; right: 0; height: 6px; top: var(--baseline-y); transform: translateY(-50%); background: rgba(15,23,42,0.08); border-radius: 9999px; overflow: hidden; z-index: 1; margin: 0 3rem; }
+  .progress-bar { display: block; height: 100%; width: 0%; background: linear-gradient(90deg, #60a5fa, #f59e0b); box-shadow: 0 0 12px rgba(96,165,250,0.6); }
+  .timeline-card {
+    position: relative;
+    scroll-snap-align: start;
+    background: rgba(255, 255, 255, 0.75);
+    backdrop-filter: blur(18px) saturate(140%);
+    -webkit-backdrop-filter: blur(18px) saturate(140%);
+    border: 1px solid rgba(255,255,255,0.4);
+    border-radius: 1.25rem;
+    box-shadow: 0 12px 30px rgba(31, 41, 55, 0.12), inset 0 1px 0 rgba(255,255,255,0.35);
+    min-width: 20rem;
+    max-width: 24rem;
+    padding: 1.25rem 1.25rem 1rem 1.25rem;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    transform-style: preserve-3d;
+    will-change: transform;
+  }
+  .card-content { display: grid; grid-template-columns: 1fr; align-items: start; }
+  .card-content > * { margin-left: 0; }
+  .card-header, .desc, .tags { padding-left: 0; }
+  .card-header { position: relative; z-index: 1; }
+  .timeline-card:hover {
+    box-shadow: 0 18px 40px rgba(31, 41, 55, 0.18), inset 0 1px 0 rgba(255,255,255,0.5);
+    transform: translateY(-4px);
+  }
+  /* Above-the-line cards (odd) */
+  .timeline-item.above .timeline-card { position: absolute; left: 0; right: 0; bottom: calc(100% - var(--baseline-y) + var(--offset)); transform: none; }
+  /* Below-the-line cards (even) */
+  .timeline-item.below .timeline-card { position: absolute; left: 0; right: 0; top: calc(var(--baseline-y) + var(--offset)); transform: none; }
+  .card-accent {
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    pointer-events: none;
+    mask: linear-gradient(#000, transparent 40%);
+    background: radial-gradient(120px 60px at 20% 0%, var(--accent, #3b82f6), transparent),
+                radial-gradient(120px 60px at 80% 0%, #f59e0b, transparent);
+    opacity: 0.18;
+    z-index: 0;
+  }
+  /* removed center dot */
+  .card-header { position: relative; z-index: 1; }
+  .connector {
+    position: absolute; left: 50%; transform: translateX(-50%);
+    width: 2px; background: rgba(15,23,42,0.2);
+  }
+  .marker {
+    position: absolute; left: 50%; transform: translate(-50%, -50%);
+    width: 12px; height: 12px; border-radius: 9999px;
+    background: #3b82f6;
+    box-shadow: 0 0 0 4px rgba(59,130,246,0.18), 0 10px 20px rgba(31,41,55,0.18);
+  }
+  .timeline-item.above .connector { top: calc(var(--baseline-y) - var(--offset)); height: var(--offset); }
+  .timeline-item.above .marker { top: var(--baseline-y); }
+  .timeline-item.below .connector { top: var(--baseline-y); height: var(--offset); }
+  .timeline-item.below .marker { top: var(--baseline-y); }
+  /* removed avatar badge */
+  .dates { color: #6b7280; font-size: 0.85rem; margin: 0 0 0.25rem 0; }
+  .title { color: #0b1220; font-weight: 800; font-size: 1.25rem; margin: 0 0 0.25rem 0; letter-spacing: -0.02em; }
+  .company { color: #111827; font-weight: 700; margin: 0 0 0.1rem 0; }
+  .location { color: #6b7280; font-size: 0.9rem; margin: 0 0 0.75rem 0; }
+  .desc { color: #2f3643; font-size: 0.975rem; line-height: 1.6; margin: 0; }
+  .badge-current { margin-left: 0.5rem; font-size: 0.7rem; font-weight: 800; padding: 0.2rem 0.45rem; border-radius: 6px; background: #16a34a; color: white; vertical-align: middle; box-shadow: 0 6px 14px rgba(22,163,74,0.25); }
+  .tags { margin-top: 0.9rem; display: flex; flex-wrap: wrap; gap: 0.5rem; }
+  .tag { font-size: 0.75rem; padding: 0.3rem 0.6rem; border-radius: 9999px; background: rgba(59,130,246,0.12); color: #1e3a8a; border: 1px solid rgba(59,130,246,0.2); backdrop-filter: blur(6px); }
+  .timeline-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 10;
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255,255,255,0.6);
+    border-radius: 9999px;
+    width: 2.5rem; height: 2.5rem;
+    display: grid; place-items: center;
+    color: #374151;
+    box-shadow: 0 10px 20px rgba(31,41,55,0.15);
+    transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease;
+  }
+  .btn-ring {
+    position: absolute; inset: -2px;
+    border-radius: inherit;
+    background: conic-gradient(from 180deg at 50% 50%, #93c5fd, #f59e0b, #93c5fd);
+    filter: blur(8px); opacity: 0.35;
+    z-index: -1;
+  }
+  .timeline-btn:hover { transform: translateY(-2px); box-shadow: 0 16px 30px rgba(31,41,55,0.22); }
+  .timeline-btn[disabled] { opacity: 0.4; cursor: not-allowed; }
+  /* Subtle entrance animation for cards */
+  @keyframes popIn {
+    from { opacity: 0; transform: translateY(8px) scale(0.98); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+  }
+  .timeline-card { animation: popIn 420ms cubic-bezier(.2,.7,.2,1) both; }
+
+  /* Mobile: turn off staggering for readability */
+  @media (max-width: 640px) {
+    .timeline-track { padding-top: 1.5rem; padding-bottom: 2rem; min-height: 520px; display: block; }
+    .timeline-item.above .timeline-card,
+    .timeline-item.below .timeline-card { position: relative; top: 0; bottom: auto; }
+    .connector { display: none; }
+    .marker { display: none; }
+  }
+  
+  @media (min-width: 768px) {
+    .timeline-card { min-width: 24rem; }
+  }
+</style>
+
+<script>
+  if (typeof window !== 'undefined') {
+    window.addEventListener('DOMContentLoaded', () => {
+      const track = document.getElementById('timeline-track');
+      const buttons = document.querySelectorAll('.timeline-btn');
+      if (!track || !buttons.length) return;
+
+      function getCardWidth() {
+        const first = track.querySelector('.timeline-card');
+        return first ? (first as HTMLElement).offsetWidth + 16 /* gap */ : 300;
+      }
+
+      function scrollByCards(direction) {
+        const delta = getCardWidth() * direction;
+        track.scrollBy({ left: delta, behavior: 'smooth' });
+      }
+
+      buttons.forEach((btn) => {
+        btn.addEventListener('click', () => {
+          const isRight = (btn as HTMLElement).classList.contains('right-0');
+          scrollByCards(isRight ? 1 : -1);
+          temporarilyPause();
+        });
+      });
+      function updateAffordances() {
+        const maxScrollLeft = track.scrollWidth - track.clientWidth;
+        const leftBtn = document.querySelector('.timeline-btn.left-0') as HTMLButtonElement | null;
+        const rightBtn = document.querySelector('.timeline-btn.right-0') as HTMLButtonElement | null;
+        if (leftBtn) leftBtn.disabled = track.scrollLeft <= 2;
+        if (rightBtn) rightBtn.disabled = track.scrollLeft >= maxScrollLeft - 2;
+        const progress = document.querySelector('.progress-bar');
+        if (progress && maxScrollLeft > 0) {
+          const pct = Math.max(0, Math.min(1, track.scrollLeft / maxScrollLeft)) * 100;
+          (progress as HTMLElement).style.width = pct + '%';
+        }
+      }
+      track.addEventListener('scroll', () => updateAffordances(), { passive: true });
+      updateAffordances();
+      track.addEventListener('keydown', (e: KeyboardEvent) => {
+        if (e.key === 'ArrowRight') { e.preventDefault(); scrollByCards(1); }
+        if (e.key === 'ArrowLeft') { e.preventDefault(); scrollByCards(-1); }
+      });
+
+      // Autoplay always on, pause on hover and user interaction
+      let autoplayInterval: number | null = null;
+      let resumeTimeout: number | null = null;
+      let isAutoScrolling = false;
+      function startAutoplay() {
+        if (autoplayInterval) return;
+        autoplayInterval = window.setInterval(() => {
+          const maxScrollLeft = track.scrollWidth - track.clientWidth;
+          isAutoScrolling = true;
+          if (track.scrollLeft >= maxScrollLeft - 4) {
+            track.scrollTo({ left: 0, behavior: 'smooth' });
+          } else {
+            track.scrollBy({ left: getCardWidth() * 0.6, behavior: 'smooth' });
+          }
+          window.setTimeout(() => { isAutoScrolling = false; }, 400);
+        }, 1600);
+      }
+      function stopAutoplay() {
+        if (autoplayInterval) { clearInterval(autoplayInterval); autoplayInterval = null; }
+      }
+      function temporarilyPause(delayMs: number = 2500) {
+        stopAutoplay();
+        if (resumeTimeout) { clearTimeout(resumeTimeout); }
+        resumeTimeout = window.setTimeout(() => startAutoplay(), delayMs);
+      }
+      track.addEventListener('mouseenter', () => stopAutoplay());
+      track.addEventListener('mouseleave', () => startAutoplay());
+      track.addEventListener('wheel', () => temporarilyPause());
+      track.addEventListener('pointerdown', () => temporarilyPause());
+      track.addEventListener('touchstart', () => temporarilyPause());
+      track.addEventListener('scroll', () => { if (!isAutoScrolling) temporarilyPause(2000); }, { passive: true });
+
+      startAutoplay();
+    });
+  }
+</script>
+
+

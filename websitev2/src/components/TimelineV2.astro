@@ -1,0 +1,102 @@
+---
+const { experiences = [] } = Astro.props;
+---
+<section class="timeline-v2" aria-label="Experience timeline (v2)">
+  <div id="timeline-v2-track" class="grid" role="list">
+    <div class="baseline" aria-hidden="true"></div>
+    <div class="progress" aria-hidden="true"><span class="fill"></span></div>
+    {experiences.map((exp, i) => (
+      <article role="listitem" class={`item ${i % 2 === 0 ? 'above' : 'below'}`}>
+        <div class="card">
+          <header class="head">
+            {exp.dates && <div class="dates">{exp.dates}</div>}
+            <h3 class="title">{exp.title}</h3>
+            {exp.company && <div class="company">{exp.company}</div>}
+            {exp.location && <div class="location">{exp.location}</div>}
+          </header>
+          {exp.description && <p class="desc">{exp.description}</p>}
+          {exp.tags && (
+            <div class="tags">
+              {exp.tags.map((tag) => <span class="tag">{tag}</span>)}
+            </div>
+          )}
+        </div>
+        <span class="connector" aria-hidden="true"></span>
+        <span class="dot" aria-hidden="true"></span>
+      </article>
+    ))}
+  </div>
+</section>
+
+<style>
+  .timeline-v2 {
+    --card-w: 24rem;
+    --gap-x: 3rem;
+    --baseline-gap: 88px;
+  }
+  .grid {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: var(--card-w);
+    grid-template-rows: auto var(--baseline-gap) auto;
+    column-gap: var(--gap-x);
+    overflow-x: auto;
+    padding: 2.5rem 3rem 3rem;
+    position: relative;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .grid::-webkit-scrollbar { display: none; }
+
+  .baseline { grid-column: 1 / -1; grid-row: 2; align-self: center; height: 3px; background: rgba(15,23,42,0.12); border-radius: 9999px; position: relative; }
+  .baseline::before { content: ''; position: absolute; inset: -1px 0; border-top: 1px dashed rgba(15,23,42,0.2); }
+
+  .progress { grid-column: 1 / -1; grid-row: 2; align-self: center; height: 6px; background: rgba(15,23,42,0.06); border-radius: 9999px; overflow: hidden; position: relative; }
+  .progress .fill { position: absolute; left: 0; top: 0; bottom: 0; width: 0%; background: linear-gradient(90deg, #60a5fa, #f59e0b); box-shadow: 0 0 12px rgba(96,165,250,0.5); }
+
+  .item { position: relative; }
+  .item.above { grid-row: 1; align-self: end; }
+  .item.below { grid-row: 3; align-self: start; }
+
+  .connector { position: absolute; left: 50%; transform: translateX(-50%); width: 2px; background: rgba(15,23,42,0.22); }
+  .item.above .connector { bottom: calc(-1 * (var(--baseline-gap) / 2)); height: calc(var(--baseline-gap) / 2); }
+  .item.below .connector { top: calc(-1 * (var(--baseline-gap) / 2)); height: calc(var(--baseline-gap) / 2); }
+
+  .dot { position: absolute; left: 50%; transform: translateX(-50%); width: 12px; height: 12px; border-radius: 9999px; background: #3b82f6; box-shadow: 0 0 0 4px rgba(59,130,246,0.18); }
+  .item.above .dot { bottom: calc(-1 * (var(--baseline-gap) / 2 + 6px)); }
+  .item.below .dot { top: calc(-1 * (var(--baseline-gap) / 2 + 6px)); }
+
+  /* Card styling */
+  .card { background: rgba(255,255,255,0.85); border: 1px solid rgba(255,255,255,0.5); border-radius: 1.25rem; box-shadow: 0 12px 30px rgba(31,41,55,0.12), inset 0 1px 0 rgba(255,255,255,0.35); padding: 1.25rem 1.25rem 1rem; }
+  .head { margin-bottom: 0.25rem; }
+  .dates { color: #6b7280; font-size: 0.85rem; margin-bottom: 0.25rem; }
+  .title { color: #0b1220; font-weight: 800; font-size: 1.2rem; margin: 0 0 0.25rem; }
+  .company { color: #111827; font-weight: 700; margin-bottom: 0.15rem; }
+  .location { color: #6b7280; font-size: 0.9rem; margin-bottom: 0.6rem; }
+  .desc { color: #2f3643; font-size: 0.95rem; line-height: 1.55; margin: 0; }
+  .tags { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 0.75rem; }
+  .tag { font-size: 0.75rem; padding: 0.3rem 0.6rem; border-radius: 9999px; background: rgba(59,130,246,0.12); color: #1e3a8a; border: 1px solid rgba(59,130,246,0.2); }
+
+  @media (max-width: 640px) {
+    .grid { grid-template-rows: auto var(--baseline-gap) auto; padding-bottom: 2.5rem; }
+  }
+</style>
+
+<script>
+  if (typeof window !== 'undefined') {
+    window.addEventListener('DOMContentLoaded', () => {
+      const track = document.getElementById('timeline-v2-track');
+      const progress = track?.querySelector('.progress .fill') as HTMLElement | null;
+      if (!track || !progress) return;
+
+      const update = () => {
+        const max = track.scrollWidth - track.clientWidth;
+        const pct = max > 0 ? (track.scrollLeft / max) * 100 : 0;
+        progress.style.width = pct + '%';
+      };
+      track.addEventListener('scroll', update, { passive: true });
+      update();
+    });
+  }
+</script>
+

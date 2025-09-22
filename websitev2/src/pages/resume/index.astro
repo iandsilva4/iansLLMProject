@@ -1,0 +1,222 @@
+---
+import MainLayout from '../../layouts/MainLayout.astro';
+import Timeline from '../../components/TimelineComponent.astro';
+import TimelineV2 from '../../components/TimelineV2.astro';
+---
+
+<MainLayout>
+  <!-- Timeline Section -->
+  <section class="pt-4 pb-8">
+    <Timeline experiences={[
+      {
+        title: 'MBA Candidate',
+        company: 'Chicago Booth',
+        dates: '2024 — 2026',
+        location: 'Chicago, IL',
+        description: 'Focus on strategy, technology, and innovation.',
+        accentColor: '#3b82f6',
+        current: true,
+        tags: ['Strategy', 'Technology', 'Innovation']
+      },
+      {
+        title: 'Summer Growth Partner (SGP)',
+        company: 'Venture/PE (example placeholder)',
+        dates: 'Summer 2025',
+        location: '—',
+        description: 'Investing and operating at the intersection of brand and technology.',
+        accentColor: '#f59e0b',
+        tags: ['PE', 'Growth', 'Brands']
+      },
+      {
+        title: 'Strategy & Operations',
+        company: 'Instacart',
+        dates: '—',
+        location: '—',
+        description: 'Led strategic initiatives driving growth and operational efficiency.',
+        accentColor: '#22c55e',
+        tags: ['Ops', 'Go-to-Market']
+      },
+      {
+        title: 'Strategy Consultant',
+        company: 'IBM',
+        dates: '—',
+        location: '—',
+        description: 'Worked on digital transformation and analytics projects.',
+        accentColor: '#111827',
+        tags: ['Consulting', 'Transformation']
+      },
+      {
+        title: 'Research / Leadership',
+        company: 'Duke University',
+        dates: '—',
+        location: 'Durham, NC',
+        description: 'Academic projects and leadership experience at Duke.',
+        accentColor: '#2563eb',
+        tags: ['Research', 'Leadership']
+      }
+    ]} />
+  </section>
+
+  <!-- Timeline v2: clean grid-based baseline experiment -->
+  <section class="pt-10 pb-16">
+    <TimelineV2 experiences={[
+      {
+        title: 'MBA Candidate',
+        company: 'Chicago Booth',
+        dates: '2024 — 2026',
+        location: 'Chicago, IL',
+        description: 'Focus on strategy, technology, and innovation.',
+        tags: ['Strategy', 'Technology', 'Innovation']
+      },
+      {
+        title: 'Summer Growth Partner (SGP)',
+        company: 'Venture/PE (example placeholder)',
+        dates: 'Summer 2025',
+        description: 'Investing and operating at the intersection of brand and technology.',
+        tags: ['PE', 'Growth', 'Brands']
+      },
+      {
+        title: 'Strategy & Operations',
+        company: 'Instacart',
+        description: 'Led strategic initiatives driving growth and operational efficiency.',
+        tags: ['Ops', 'Go-to-Market']
+      },
+      {
+        title: 'Strategy Consultant',
+        company: 'IBM',
+        description: 'Worked on digital transformation and analytics projects.',
+        tags: ['Consulting', 'Transformation']
+      },
+      {
+        title: 'Research / Leadership',
+        company: 'Duke University',
+        location: 'Durham, NC',
+        description: 'Academic projects and leadership experience at Duke.',
+        tags: ['Research', 'Leadership']
+      }
+    ]} />
+  </section>
+  <!-- Call to Action -->
+  <section class="resume-section">
+    <div class="cta-card">
+      <h3 class="cta-title">Let's Connect</h3>
+      <p class="cta-description">
+        Interested in discussing opportunities in strategy, technology, or innovation? 
+        I'm always open to meaningful conversations about the future of business.
+      </p>
+      <div class="cta-buttons">
+        <a href="/contact" class="cta-btn cta-btn-primary">
+          <span class="btn-text">Get in Touch</span>
+          <span class="btn-icon">→</span>
+        </a>
+        <a href="/projects" class="cta-btn cta-btn-secondary">
+          <span class="btn-text">View Projects</span>
+          <span class="btn-icon">→</span>
+        </a>
+      </div>
+    </div>
+  </section>
+</MainLayout>
+
+<style>
+  /* ===== RESUME SECTIONS ===== */
+  .resume-section { }
+
+  /* ===== CTA SECTION ===== */
+  .cta-card {
+    text-align: center;
+    background: linear-gradient(135deg, var(--color-primary-50), var(--color-accent-50));
+    padding: 3rem;
+    border-radius: 20px;
+    border: 1px solid var(--color-primary-200);
+  }
+
+  .cta-title {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--color-secondary-800);
+    margin-bottom: 1rem;
+  }
+
+  .cta-description {
+    font-size: 1.125rem;
+    color: var(--color-secondary-600);
+    line-height: 1.6;
+    margin-bottom: 2rem;
+    max-width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .cta-buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .cta-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 1rem 2rem;
+    border-radius: 15px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s ease;
+  }
+
+  .cta-btn-primary {
+    background: linear-gradient(135deg, var(--color-primary-600), var(--color-primary-700));
+    color: white;
+    box-shadow: 0 10px 30px rgba(59, 130, 246, 0.3);
+  }
+
+  .cta-btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 15px 40px rgba(59, 130, 246, 0.4);
+  }
+
+  .cta-btn-secondary {
+    background: rgba(255, 255, 255, 0.9);
+    color: var(--color-primary-600);
+    border: 2px solid var(--color-primary-200);
+  }
+
+  .cta-btn-secondary:hover {
+    background: var(--color-primary-50);
+    transform: translateY(-2px);
+  }
+
+  .btn-icon {
+    transition: transform 0.3s ease;
+  }
+
+  .cta-btn:hover .btn-icon {
+    transform: translateX(4px);
+  }
+
+  /* ===== RESPONSIVE DESIGN ===== */
+  @media (max-width: 768px) {
+    .cta-buttons {
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .cta-btn {
+      width: 100%;
+      max-width: 300px;
+      justify-content: center;
+    }
+
+    .resume-section {
+      padding: 2rem;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .resume-section {
+      padding: 1.5rem;
+    }
+  }
+</style> 
